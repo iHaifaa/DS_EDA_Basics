@@ -1,0 +1,108 @@
+# Diamonds analysis
+# Haifaa
+# 29/9/2020
+# A small case study for EDA and states
+
+library(tidyverse) 
+jems <- read_csv("Diamond_Analysis/Data/diamonds.csv") #_ is 4 newer func and . is for old
+jems <- as_tibble(jems)
+view(jems)
+
+# Supper convenient way
+library(rio) # R i/o
+install_formats()
+diamondsDataset2 <- import("data/diamonds.csv")
+rm(diamondsDataset2)
+
+# Get familiar with data EDA
+dim(jems)
+names(jems) #labels
+str(jems) #types of each col (overview)
+glimpse(jems) #types of each col (overview)
+summary(jems) #stat info
+jems
+# R good and vvs2
+jems %>% 
+  filter(clarity == 'VVS2' & cut == 'Good')
+
+#Exercise 8.3 (Counting individual groups) - How many diamonds with a clarity of category “IF” are present in the data-set? - What fraction of the total do they represent?
+ifDiamonds <- jems %>% #select
+  filter(clarity == 'IF')
+#group_split() # to split df into different df, each has unique value for clarity
+fractionOfIf <- nrow(ifDiamonds)/nrow(jems) # he did %>% , I'll look at it
+export(ifDiamonds, "Diamond_Analysis/Data/clarity.csv")
+#or
+# sum(jems$clarity == 'IF')
+
+#Exercise 8.4 (Summarizing proportions) - What proportion of the whole is made up of each category of clarity?
+library("dplyr")
+jems %>% 
+  group_by(clarity) %>% # categorical col
+  summarize(count=n()/nrow(jems)) 
+#count()
+#OR
+jems %>% 
+  group_by(clarity) %>% 
+  count()
+table(jems$clarity)/nrow(jems)
+#OR
+jems %>%
+  group_by(clarity) %>%
+  count() %>%
+  mutate(prop = n/nrow(jems))
+
+# Example by indexing
+jems$price[jems$clarity == 'IF']
+
+#Exercise 8.5 (Find specific diamonds prices) - What is the cheapest diamond price overall? 
+cheapest  <- jems %>%
+  filter(price == min(price)) #To get all cheapests
+cheapest
+#or
+chD <-min(jems$price)
+
+#- What is the range of diamond prices? - 
+rangePrice <- range(jems$price)
+#What is the average diamond price in each category of cut and color?
+jems %>%
+  group_by(cut, color) %>%
+  summarise(avg = mean(price)) 
+
+#Exercise 8.6 (Basic plotting) Make a scatter plot that shows the price of a diamond as described by another continous variable, like the carat.
+ggplot(jems, aes(x = carat, y = price)) + 
+  geom_point()
+
+#Exercise 8.8 (Applying transformations) Using the functions we discuss earlier, and in class, apply a log10 transformation to both the price and carat. You can save these as new columns in the data set called price_log10 and carat_log10.
+#There is an issue with this way which is having many obj in env:
+logPrice <- log10(jems$price) 
+logCarat <- log10(jems$carat)
+jems$carat_log10 <- logCarat
+jems$price_log10 <- logPrice
+# better way:
+jems <-  jems %>% 
+  mutate(logPrice = log10(price), 
+         logCarat=log10(carat))
+jems
+
+jems %>% 
+  add_column(logPrice2 = log10(price))
+
+# Make a scatter plot that shows the price of a diamond as described by another continuous variable, like the carat.
+ggplot(jems, aes(x = logCarat, y = logPrice)) + 
+  geom_point()
+
+#At the beginning of the course we used the PlantGrowth data set to produce a model. Can you use the same function we used earlier, lm() to recreate a model that describes the relatioship shown in the plot? 
+#We’ll get into the details of exactly what that model is doing later on. For now, we’ll just take a look at it in action.
+#produce our model y ~ x y predicted by x:
+jems_lm <- lm(logPrice ~ logCarat, data = jems)
+jems_lm
+# coofecient 3.66 means on 3.66 y , we are on zero at x axis (see the plot)
+# Now that we’ve described the diamond price given a single variable, can you display that on the plot? Try to use the geom_smooth() function to add this new layer.
+ggplot(jems, aes(x = logCarat, y = logPrice)) +
+  geom_point() +
+  geom_smooth(method = 'lm',
+              se = FALSE, 
+              colour = "red")
+
+jems
+
