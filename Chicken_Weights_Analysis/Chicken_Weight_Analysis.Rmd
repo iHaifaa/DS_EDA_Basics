@@ -1,0 +1,69 @@
+---
+title: "Chicken Weight Analysis"
+author: "*Haifaa Alzahrani*"
+date: "*7/10/2020*"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(tidyverse)
+library(Hmisc)
+library(agricolae)
+library(DT)
+#kable(chickwts)
+```
+
+## Descriptive Statistics
+
+```{r chickwts, echo=FALSE,  message=FALSE}
+#Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. and message=FALSE to prevent displaying console's messages.
+chickTable <- chickwts %>%  
+  group_by(feed) %>%
+  summarise(n = length(feed),
+            Average = mean(weight),
+            SD = sd(weight))
+datatable(chickTable)
+```
+
+## Plots
+
+```{r chickwts1, echo=FALSE,  message=FALSE}
+p <- ggplot(chickwts, aes(feed,weight)) +
+  geom_boxplot(outlier.fill = )
+p + theme_classic()
+```
+
+
+```{r chickwts2, echo=FALSE,  message=FALSE}
+p2 <- ggplot(chickwts, aes(feed,weight)) +
+   geom_jitter(width = 1) +
+  stat_summary(fun.data = mean_sdl, 
+               fun.args = list(mult = 1), 
+               col = "red") 
+p2 + theme_classic()
+```
+
+## Inferential Statistics
+The one-way ANOVA summary:
+
+```{r chickwts3, echo=FALSE,  message=FALSE}
+chickTable_lm <- lm(weight ~ feed, data = chickwts)
+#anova(chickTable_lm)
+kable(anova(chickTable_lm))
+```
+Tukey’s Post-hoc test:
+
+```{r chickwts4, echo=FALSE, rows.print=15, cols.print=5, message=FALSE}
+chickwts.av <- aov(weight ~ feed, data = chickwts)
+tukeyTest <- TukeyHSD(chickwts.av)
+#tukeyTest$feed[0][0] <- c("Group Comparison", "Difference in Means", "Upper 95% CI", "Lower 95% Cl", "Adjusted p-value")
+datatable(tukeyTest$feed)
+```
+
+
