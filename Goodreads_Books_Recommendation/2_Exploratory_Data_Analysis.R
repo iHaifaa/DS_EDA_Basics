@@ -12,6 +12,16 @@ library(dplyr)
 
 ######################################################################################################################
 
+# A brief discussion about the dataset ----
+
+# The dataset has systematical error (bias):
+# 1) Selection bias: 
+# 2) Technology bias: 
+
+# In addition, it has duplication issues and need to manually verified. 
+
+######################################################################################################################
+
 # Load data  ----
 
 dataset <- read.csv("Goodreads_Books_Recommendation/Data/full_books.csv", encoding="UTF-8")
