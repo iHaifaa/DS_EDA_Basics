@@ -62,7 +62,8 @@ Tukey’s Post-hoc test:
 ```{r chickwts4, echo=FALSE, rows.print=15, cols.print=5, message=FALSE}
 chickwts.av <- aov(weight ~ feed, data = chickwts)
 tukeyTest <- TukeyHSD(chickwts.av)
-#tukeyTest$feed[0][0] <- c("Group Comparison", "Difference in Means", "Upper 95% CI", "Lower 95% Cl", "Adjusted p-value")
+#newcolumn_name <- c("Group Comparison", "Difference in Means", "Upper 95% CI", "Lower 95% Cl", "Adjusted p-value")
+#tukeyTest[ , newcolumn_name:=paste(oldcolumn)]
 datatable(tukeyTest$feed)
 ```
 
