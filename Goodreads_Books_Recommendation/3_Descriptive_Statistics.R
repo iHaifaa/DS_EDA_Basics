@@ -41,9 +41,8 @@ dataset %>%
 
 # Understanding the relationships among the variables ----
 
-# Which factor is much correlated with average rating of the book?
+# Which factor is most highly-correlated with the average rating of the book?
 
-# Does the awards correlated with average rating of the book?
+# Do the awards correlate with the average rating of the book?
 
 # Is the number of pages and rating counts correlated?
-

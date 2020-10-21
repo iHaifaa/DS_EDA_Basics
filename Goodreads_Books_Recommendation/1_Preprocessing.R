@@ -13,7 +13,6 @@ library(dplyr)
 ######################################################################################################################
 
 # Load data  ----
-
 dataset <- read.csv("Goodreads_Books_Recommendation/Data/books.csv")
 dataset <- as_tibble(dataset) #Enhanced dataframe
 
@@ -23,6 +22,20 @@ dataset2 <- as_tibble(dataset2) #Enhanced dataframe
 # Overview ----
 glimpse(dataset)
 
+#### suggestions
+# # Enhanced dataframe
+# dataset <- read_csv("Goodreads_Books_Recommendation/Data/books.csv")
+# glimpse(dataset)
+# 
+# # dataset <- remove_empty(dataset)
+# # glimpse(dataset)
+# 
+# # Enhanced dataframe 2
+# dataset2 <- rio::import("Goodreads_Books_Recommendation/Data/goodreads_books.csv")
+# glimpse(dataset2)
+####
+
+
 ######################################################################################################################
 
 # Preprocessing ----
@@ -30,6 +43,7 @@ glimpse(dataset)
 # Remove duplicated observations or books with no isbn
 dataset <- dataset %>% 
   distinct(isbn, .keep_all = TRUE) # was 11,131 rows - became 11,123 rows
+
 dataset2 <- dataset2 %>% 
   distinct(isbn, .keep_all = TRUE) # was 52199 rows - became 40317 rows
 
@@ -46,6 +60,11 @@ dataset <-
 # Format publication date to only include the year
 dataset$publication_date <- 
   substring(dataset$publication_date, nchar(as.character(dataset$publication_date)) - 3)
+
+# suggestion:
+# library(lubridate)
+# year(mdy(dataset$publication_date))
+####
 
 # Keep only the first author (the others either a translated author name, a translator, etc)
 dataset$authors <- 

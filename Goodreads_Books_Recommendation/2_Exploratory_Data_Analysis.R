@@ -8,7 +8,6 @@
 # Initialize packages ----
 
 library(tidyverse)
-library(dplyr)
 
 ######################################################################################################################
 
@@ -33,6 +32,10 @@ glimpse(dataset)
 # Remove X
 dataset <- dataset %>%
   select(-X.1, -X)
+
+## suggestion
+# Use library(janitor)
+# remove_empty()
 
 ######################################################################################################################
 
@@ -60,14 +63,16 @@ tribble(
 
 # Number of authors
 dataset$authors %>% 
-  unique %>% length # 4215
+  unique() %>% length() # 4215
 
 # Visualization
 
 # Repeated books' titles
 dataset$title %>% 
-  length - dataset$title %>% 
-  unique %>% length # 775 repeated titles
+  length() - dataset$title %>% 
+  unique() %>% length() # 775 repeated titles
+
+# sum(duplicated(dataset$title))
 
 # There are duplicated books due to adding different parts or edition as separated books
 dataset %>%
@@ -91,9 +96,8 @@ dataset %>%
   summarise(rating_sum = sum(ratings_count)) %>%
   arrange(-rating_sum)  %>%
   top_n(10) %>%
-  ggplot(aes(x = reorder(authors, rating_sum), y = rating_sum, fill = authors)) + 
-  geom_col(alpha=0.7) +
-  scale_fill_brewer(palette = "Set3") +
+  ggplot(aes(x = reorder(authors, rating_sum), y = rating_sum)) + 
+  geom_col(alpha=0.7, fill = "red") +
   labs(x = "Author", y = "Sum of Ratings") +
   ggtitle("Most Popular Authors")+
   coord_flip()
