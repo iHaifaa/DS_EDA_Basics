@@ -14,10 +14,10 @@ library(dplyr)
 
 # Load data  ----
 
-dataset <- read.csv("Goodreads_Books/Data/books.csv")
+dataset <- read.csv("Goodreads_Books_Recommendation/Data/books.csv")
 dataset <- as_tibble(dataset) #Enhanced dataframe
 
-dataset2 <- read.csv("Goodreads_Books/Data/goodreads_books.csv", encoding="UTF-8")
+dataset2 <- read.csv("Goodreads_Books_Recommendation/Data/goodreads_books.csv", encoding="UTF-8")
 dataset2 <- as_tibble(dataset2) #Enhanced dataframe
 
 # Overview ----
@@ -47,8 +47,11 @@ dataset <-
 dataset$publication_date <- 
   substring(dataset$publication_date, nchar(as.character(dataset$publication_date)) - 3)
 
-# Encode all English languages into Eng
+# Keep only the first author (the others either a translated author name, a translator, etc)
+dataset$authors <- 
+  word(dataset$authors,1,sep = "\\/")
 
+# Encode all English languages into Eng
 
 # Make it tidy table (because genre_and_votes has multiple values) 
 #dataset <- dataset %>%
@@ -64,4 +67,4 @@ dataset$publication_date <-
 ######################################################################################################################
 
 # Save the resulted dataframe as csv
-write.csv(dataset, "Goodreads_Books/Data/full_books.csv")
+write.csv(dataset, "Goodreads_Books_Recommendation/Data/full_books.csv")
