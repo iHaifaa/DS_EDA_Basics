@@ -7,6 +7,3 @@ This repo aims to apply the skills and knowledge that I have gained within Data 
 - Chicken_Weights_Analysis
 - Diamond_Analysis
 - Irrigation_Analysis
-- Goodreads_Books_Recommendation
-
-## Python-based Projects:
