@@ -21,7 +21,8 @@ str(jems) #types of each col (overview)
 glimpse(jems) #types of each col (overview)
 summary(jems) #stat info
 jems
-# R good and vvs2
+
+# good and vvs2
 jems %>% 
   filter(clarity == 'VVS2' & cut == 'Good')
 
@@ -40,11 +41,13 @@ jems %>%
   group_by(clarity) %>% # categorical col
   summarize(count=n()/nrow(jems)) 
 #count()
+
 #OR
 jems %>% 
   group_by(clarity) %>% 
   count()
 table(jems$clarity)/nrow(jems)
+
 #OR
 jems %>%
   group_by(clarity) %>%

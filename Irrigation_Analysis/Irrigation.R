@@ -43,9 +43,3 @@ irrigation_t %>%
   slice(1:2)
 #OR
 #slice_max(diff, n =2)
-
-#region[diff == max(diff)]
-# rate-of-change in each region?
-# lowest and highest? 
-#plot area over 
-
