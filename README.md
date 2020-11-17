@@ -6,7 +6,6 @@ This repo aims to apply the basic skills and knowledge that I have gained within
 
 - [R](http://scavetta.academy/misk/Misk_DSI_R/_book/) 
 - [Git](http://scavetta.academy/misk/dev_tools/01_os_editors.html)
-- [Statistics](http://scavetta.academy/misk/stats/_book/)
 - [Data Viz](http://scavetta.academy/misk/dataviz/_book/)
 
 ## Project Description
