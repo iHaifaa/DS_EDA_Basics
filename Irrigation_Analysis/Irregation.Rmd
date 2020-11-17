@@ -9,22 +9,60 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
+## Initilizing the packages
 ```{r cars}
-summary(cars)
+library(tidyverse)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
+## Loading data
 ```{r pressure, echo=FALSE}
-plot(pressure)
+irrigation <- read_csv("~/MISK_DSI/R/DS_EDA_Basics/Irrigation_Analysis/Data/irrigation_wide.csv")
+view(irrigation)
+str(irrigation)
+glimpse(irrigation)
+summary(irrigation)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+# make it Tidy ....
+irrigation_t <- irrigation %>%
+  pivot_longer(-(year), 
+               names_to = "region", 
+               values_to = "value")#longer not necessrly be tidy
+```
+
+## EDA
+```{r}
+# in 2007 what is the total area under irrigation for 2 Americas? Easy, no need to tidy
+irrigation %>%
+  filter(year == 2007)  %>%
+  select(c(4,5))  %>% #or select("","")
+  sum()
+```
+
+```{r}
+# total area under irrigation in each year?
+irrigation_t %>%
+  group_by(year) %>%
+  summarise(total = sum(value)) 
+```
+
+```{r}
+# Standardize against 1980 (relative change over 1980) Easier
+irrigation_t %>% 
+  group_by(region) %>% 
+  summarise(diff = value[year==2007] - value[year==1980])
+```
+
+```{r}
+#which region increased the most? 
+irrigation_t %>% 
+  group_by(region) %>% 
+  summarise(diff = value[year==2007] - value[year==1980])%>%
+  #filter(diff == max(diff))
+  arrange(-diff)  %>% 
+  slice(1:2)
+#OR
+#slice_max(diff, n =2)
+```
+
